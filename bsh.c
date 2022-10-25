@@ -179,6 +179,11 @@ cat(FILE * ftprt){
 }
 
 static void
+evalcmd(struct cmd * cmd){
+    cmd_print(cmd);
+}
+
+static void
 usage(int status)
 {
     puts(USAGE);
@@ -235,9 +240,10 @@ main(int argc, char *argv[])
         
         mu_str_chomp(line);
         pipeline = pipeline_new(line);
-
+    
         pipeline_print(pipeline);
-        /* TODO eval */
+        evalcmd(list_first_entry());
+        
 
         pipeline_free(pipeline);
     }
