@@ -174,6 +174,11 @@ pipeline_print(const struct pipeline *pipeline)
 }
 
 static void
+cat(FILE * ftprt){
+    
+}
+
+static void
 usage(int status)
 {
     puts(USAGE);
@@ -187,6 +192,7 @@ main(int argc, char *argv[])
     size_t len = 0;
     char *line = NULL;
     struct pipeline *pipeline = NULL;
+    FILE * fp;
 
     int opt, nargs;
     const char *short_opts = ":h";
@@ -209,6 +215,14 @@ main(int argc, char *argv[])
             default :
                 mu_die("unexpected getopt_long return value: %c\n", (char)opt);
         }
+    }
+
+    nargs = argc - optind;
+    if(optind){
+        fp = fopen(argv[optind], "r");
+        if (fp == NULL)
+            mu_die_errno(errno, "can't create log file");
+        setlinebuf(fp);
     }
 
     /* REPL */
