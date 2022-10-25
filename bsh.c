@@ -215,7 +215,7 @@ evalcmd(struct cmd * cmd, FILE * fp){
     }
 
     int i;
-    nargs = argc - optind;
+    nargs = &cmd->num_args - optind;
     if(nargs){
         fp = fopen(argv[optind], "r");
         if (fp == NULL)
