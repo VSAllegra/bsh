@@ -178,12 +178,8 @@ cat(FILE * fp){
     char * line;
     size_t n = 0;
     ssize_t len = 0;
-    while (1) {
+    while (len >= 0) {
         len = getline(&line, &n, fp);
-        if (len == -1) {
-            if (errno != 0)
-                exit(1);
-        }
         printf("%s", line);
     }
     rewind(fp);
