@@ -183,6 +183,7 @@ cat(FILE * fp){
         c = fgetc(fp);
     }
     printf("%c", '\n');
+    rewind(fp);
 }
 
 static void
