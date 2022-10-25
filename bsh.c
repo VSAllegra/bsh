@@ -218,10 +218,10 @@ main(int argc, char *argv[])
     }
 
     nargs = argc - optind;
-    if(optind){
+    if(nargs){
         fp = fopen(argv[optind], "r");
         if (fp == NULL)
-            mu_die_errno(errno, "can't create log file");
+            mu_die_errno(errno, "can't create file");
         setlinebuf(fp);
     }
 
