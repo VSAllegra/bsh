@@ -174,13 +174,15 @@ pipeline_print(const struct pipeline *pipeline)
 }
 
 static void
-cat(FILE * fp){
+cat(FILE * fp, int line_max){
     char * line;
     size_t n = 0;
     ssize_t len = 0;
-    while (len >= 0) {
+    int line_num = 0;
+    while (len >= 0 && line_num < line_max) {
         len = getline(&line, &n, fp);
-        printf("%s\n", line);
+        line_num++;
+        printf("%s", line);
     }
     rewind(fp);
 }
@@ -190,7 +192,10 @@ evalcmd(struct cmd * cmd, FILE * fp){
     int i;
     for (i = 0; i < cmd->num_args; i++){
         if(strcmp((cmd->args[i]), "cat") == 0){
-            cat(fp);
+            cat(fp, __INT_MAX__);
+        }
+        else if(strcmp((cmd->args[i]), "head") == 0){
+            cat(fp, );
         }
     }
 }
@@ -233,14 +238,6 @@ main(int argc, char *argv[])
             default :
                 mu_die("unexpected getopt_long return value: %c\n", (char)opt);
         }
-    }
-
-    nargs = argc - optind;
-    if(nargs){
-        fp = fopen(argv[optind], "r");
-        if (fp == NULL)
-            mu_die_errno(errno, "can't create file");
-        setlinebuf(fp);
     }
 
     /* REPL */
