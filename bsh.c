@@ -180,7 +180,7 @@ cat(FILE * fp){
     ssize_t len = 0;
     while (len >= 0) {
         len = getline(&line, &n, fp);
-        printf("%s", line);
+        printf("%s\n", line);
     }
     rewind(fp);
 }
