@@ -203,7 +203,7 @@ evalcmd(struct cmd * cmd, FILE * fp){
             break;
         switch(opt){
             case 'n':
-                mu_str_to_int(optarg, 10, &linemax);
+                mu_str_to_int(optarg, 10, &line_max);
                 break;
             case '?':
                 mu_die("unknown option '%c' (decimal: %d)", optopt, optopt);
