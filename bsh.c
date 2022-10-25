@@ -215,6 +215,7 @@ evalcmd(struct cmd * cmd, FILE * fp){
         }
     }
 
+    printf("%d", line_max);
     int i;
     nargs = cmd->num_args - optind;
     if(nargs){
