@@ -188,9 +188,22 @@ main(int argc, char *argv[])
     char *line = NULL;
     struct pipeline *pipeline = NULL;
 
-    /* TODO: getopt_long */
-    MU_UNUSED(argc);
-    MU_UNUSED(argv);
+    while (1) {
+        opt = getopt_long(argc, argv, short_opts, long_opts, NULL);
+        if (opt == -1)
+            break;
+        switch(opt){
+            case 'h':
+                usage(0);
+                break;
+            case '?':
+                mu_die("unknown option '%c' (decimal: %d)", optopt, optopt);
+            case ':':
+                mu_die("missing option argument for option %c", optopt);
+            default :
+                mu_die("unexpected getopt_long return value: %c\n", (char)opt);
+        }
+    }
 
     /* REPL */
     while (1) {
