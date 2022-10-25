@@ -174,13 +174,24 @@ pipeline_print(const struct pipeline *pipeline)
 }
 
 static void
-cat(FILE * ftprt){
-    
+cat(FILE * fp){
+    char * c;
+    c = fgetc(fptr);
+    while (c != EOF)
+    {
+        printf ("%c", c);
+        c = fgetc(fptr);
+    }
 }
 
 static void
-evalcmd(struct cmd * cmd){
-    cmd_print(cmd);
+evalcmd(struct cmd * cmd, FILE * fp){
+    switch(&cmd->args[0]){
+        case "cat":
+            cat(fp);
+        
+
+    }
 }
 
 static void
@@ -244,7 +255,7 @@ main(int argc, char *argv[])
     
         pipeline_print(pipeline);
         list_for_each_entry(cmd, &pipeline->head, list) {
-            evalcmd(cmd);
+            evalcmd(cmd, fp);
         }
         
         
