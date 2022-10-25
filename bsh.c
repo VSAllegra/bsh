@@ -195,6 +195,7 @@ evalcmd(struct cmd * cmd, FILE * fp){
             {"line", argument_required, NULL, 'n'},
             {NULL, 0, NULL, 0}
     };
+    
     while (1) {
         opt = getopt_long(&cmd->num_args, &cmd->args, short_opts, long_opts, NULL);
         if (opt == -1)
@@ -211,13 +212,20 @@ evalcmd(struct cmd * cmd, FILE * fp){
                 mu_die("unexpected getopt_long return value: %c\n", (char)opt);
         }
     }
+
     int i;
+    nargs = argc - optind;
+    if(nargs){
+        fp = fopen(argv[optind], "r");
+        if (fp == NULL)
+            mu_die_errno(errno, "can't create file");
+        setlinebuf(fp);
+    }
+
+
     for (i = 0; i < cmd->num_args; i++){
-        if(strcmp((cmd->args[i]), "cat") == 0){
-            cat(fp, line_max);
-        }
-        else if(strcmp((cmd->args[i]), "head") == 0){
-            cat(fp, line_max);
+        if(strcmp((cmd->args[i]), "cat") == 0 || strcmp((cmd->args[i]), "head") == 0){
+            cat(fp, line_max;
         }
     }
 }
@@ -261,6 +269,8 @@ main(int argc, char *argv[])
                 mu_die("unexpected getopt_long return value: %c\n", (char)opt);
         }
     }
+
+  
 
     /* REPL */
     while (1) {
