@@ -180,7 +180,7 @@ cat(FILE * fp){
     while (c != EOF)
     {
         printf ("%c", c);
-        c = fgetc(fptr);
+        c = fgetc(fp);
     }
 }
 
