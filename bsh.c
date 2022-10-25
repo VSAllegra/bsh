@@ -175,14 +175,18 @@ pipeline_print(const struct pipeline *pipeline)
 
 static void
 cat(FILE * fp){
-    char c;
-    c = fgetc(fp);
-    while (c != EOF)
-    {
-        printf ("%c", c);
-        c = fgetc(fp);
+    char * line;
+    size_t n = 0;
+    while (1) {
+        lineNum++;
+        matchPresent = false;
+        len = getline(&line, &n, fp);
+        if (len == -1) {
+            if (errno != 0)
+                exit(1);
+        }
+        printf("%s", line);
     }
-    printf("%c", '\n');
     rewind(fp);
 }
 
