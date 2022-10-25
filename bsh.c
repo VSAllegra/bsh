@@ -177,9 +177,8 @@ static void
 cat(FILE * fp){
     char * line;
     size_t n = 0;
+    ssize_t len = 0;
     while (1) {
-        lineNum++;
-        matchPresent = false;
         len = getline(&line, &n, fp);
         if (len == -1) {
             if (errno != 0)
