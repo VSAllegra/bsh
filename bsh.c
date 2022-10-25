@@ -191,6 +191,7 @@ cat(FILE * fp, int line_max){
 static void
 evalcmd(struct cmd * cmd, FILE * fp){
     int line_max = 100;
+    int ret;
 
     int opt, nargs;
     const char *short_opts = ":n:";
@@ -204,7 +205,10 @@ evalcmd(struct cmd * cmd, FILE * fp){
             break;
         switch(opt){
             case 'n':
-                mu_str_to_int(optarg, 10, &line_max);
+                ret = mu_str_to_int(optarg, 10, &line_max);
+                if (ret != 0)
+                    die_errno(-ret, "invalid value for --: \"%s\"", optarg);
+                break;
                 break;
             case '?':
                 mu_die("unknown option '%c' (decimal: %d)", optopt, optopt);
@@ -215,7 +219,6 @@ evalcmd(struct cmd * cmd, FILE * fp){
         }
     }
 
-    printf("%d", line_max);
     int i;
     nargs = cmd->num_args - optind;
     if(nargs){
