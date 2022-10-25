@@ -194,7 +194,7 @@ evalcmd(struct cmd * cmd, FILE * fp){
     int opt, nargs;
     const char *short_opts = ":n:";
     struct option long_opts[] = {
-            {"line", argument_required, NULL, 'n'},
+            {"line", required_argument, NULL, 'n'},
             {NULL, 0, NULL, 0}
     };
     while (1) {
