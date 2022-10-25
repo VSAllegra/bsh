@@ -243,8 +243,10 @@ main(int argc, char *argv[])
         pipeline = pipeline_new(line);
     
         pipeline_print(pipeline);
-        list_first_entry(cmd, tmp, &pipeline->head);
-        evalcmd(cmd);
+        list_for_each_entry(cmd, &pipeline->head, list) {
+            evalcmd(cmd);
+        }
+        
         
 
         pipeline_free(pipeline);
