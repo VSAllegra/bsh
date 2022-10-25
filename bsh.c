@@ -190,12 +190,13 @@ cat(FILE * fp, int line_max){
 static void
 evalcmd(struct cmd * cmd, FILE * fp){
     int line_max = 100;
+
+    int opt, nargs;
     const char *short_opts = ":n:";
     struct option long_opts[] = {
             {"line", argument_required, NULL, 'n'},
             {NULL, 0, NULL, 0}
     };
-    
     while (1) {
         opt = getopt_long(&cmd->num_args, &cmd->args, short_opts, long_opts, NULL);
         if (opt == -1)
@@ -225,7 +226,7 @@ evalcmd(struct cmd * cmd, FILE * fp){
 
     for (i = 0; i < cmd->num_args; i++){
         if(strcmp((cmd->args[i]), "cat") == 0 || strcmp((cmd->args[i]), "head") == 0){
-            cat(fp, line_max;
+            cat(fp, line_max);
         }
     }
 }
