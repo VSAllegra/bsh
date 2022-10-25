@@ -198,7 +198,7 @@ evalcmd(struct cmd * cmd, FILE * fp){
             {NULL, 0, NULL, 0}
     };
     while (1) {
-        opt = getopt_long(&cmd->num_args, &cmd->args, short_opts, long_opts, NULL);
+        opt = getopt_long(cmd->num_args, cmd->args, short_opts, long_opts, NULL);
         if (opt == -1)
             break;
         switch(opt){
@@ -215,9 +215,9 @@ evalcmd(struct cmd * cmd, FILE * fp){
     }
 
     int i;
-    nargs = &cmd->num_args - optind;
+    nargs = cmd->num_args - optind;
     if(nargs){
-        fp = fopen(&cmd->args[optind], "r");
+        fp = fopen(cmd->args[optind], "r");
         if (fp == NULL)
             mu_die_errno(errno, "can't create file");
         setlinebuf(fp);
