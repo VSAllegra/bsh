@@ -176,7 +176,7 @@ pipeline_print(const struct pipeline *pipeline)
 static void
 cat(FILE * fp){
     char c;
-    c = fgetc(fptr);
+    c = fgetc(fp);
     while (c != EOF)
     {
         printf ("%c", c);
