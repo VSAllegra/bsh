@@ -197,6 +197,7 @@ main(int argc, char *argv[])
     size_t len = 0;
     char *line = NULL;
     struct pipeline *pipeline = NULL;
+    struct cmd *cmd, *tmp;
     FILE * fp;
 
     int opt, nargs;
@@ -242,7 +243,8 @@ main(int argc, char *argv[])
         pipeline = pipeline_new(line);
     
         pipeline_print(pipeline);
-        evalcmd(list_first_entry());
+        list_first_entry(cmd, tmp, &pipeline->head)
+        evalcmd(cmd);
         
 
         pipeline_free(pipeline);
