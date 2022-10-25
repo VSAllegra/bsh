@@ -184,7 +184,7 @@ cat(FILE * fp, int line_max){
         line_num++;
         printf("%s", line);
     }
-    printf('\n');
+    printf("\n");
     rewind(fp);
 }
 
