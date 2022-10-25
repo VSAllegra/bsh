@@ -175,7 +175,7 @@ pipeline_print(const struct pipeline *pipeline)
 
 static void
 cat(FILE * fp){
-    char * c;
+    char c;
     c = fgetc(fptr);
     while (c != EOF)
     {
@@ -186,9 +186,10 @@ cat(FILE * fp){
 
 static void
 evalcmd(struct cmd * cmd, FILE * fp){
-    printf((&cmd->args[0])[0]);
-    if(strcmp((&cmd->args[0])[0], "cat") == 0){
-        cat(fp);
+    for (i = 0; i < cmd->num_args; i++){
+        if(strcmp((&cmd->args[0]), "cat") == 0){
+            cat(fp);
+        }
     }
 }
 
