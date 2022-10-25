@@ -186,11 +186,10 @@ cat(FILE * fp){
 
 static void
 evalcmd(struct cmd * cmd, FILE * fp){
-    switch(&cmd->args[0]){
-        case "cat":
-            cat(fp);
-        
-
+    printf(&cmd->args[0]);
+    if(&cmd->args[0])
+    switch(strcmp(&cmd->args[0], "cat") == 0){
+        cat(fp);
     }
 }
 
