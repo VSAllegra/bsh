@@ -188,6 +188,12 @@ main(int argc, char *argv[])
     char *line = NULL;
     struct pipeline *pipeline = NULL;
 
+    int opt, nargs;
+    const char *short_opts = ":h";
+    struct option long_opts[] = {
+            {"help", no_argument, NULL, 'h'},
+            {NULL, 0, NULL, 0}
+    };
     while (1) {
         opt = getopt_long(argc, argv, short_opts, long_opts, NULL);
         if (opt == -1)
