@@ -217,7 +217,7 @@ evalcmd(struct cmd * cmd, FILE * fp){
     int i;
     nargs = &cmd->num_args - optind;
     if(nargs){
-        fp = fopen(argv[optind], "r");
+        fp = fopen(&cmd->args[optind], "r");
         if (fp == NULL)
             mu_die_errno(errno, "can't create file");
         setlinebuf(fp);
