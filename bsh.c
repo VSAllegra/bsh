@@ -189,13 +189,35 @@ cat(FILE * fp, int line_max){
 
 static void
 evalcmd(struct cmd * cmd, FILE * fp){
+    int line_max = 100;
+    const char *short_opts = ":n:";
+    struct option long_opts[] = {
+            {"line", argument_required, NULL, 'n'},
+            {NULL, 0, NULL, 0}
+    };
+    while (1) {
+        opt = getopt_long(&cmd->num_args, &cmd->args, short_opts, long_opts, NULL);
+        if (opt == -1)
+            break;
+        switch(opt){
+            case 'n':
+                mu_str_to_int(optarg, 10, &linemax);
+                break;
+            case '?':
+                mu_die("unknown option '%c' (decimal: %d)", optopt, optopt);
+            case ':':
+                mu_die("missing option argument for option %c", optopt);
+            default :
+                mu_die("unexpected getopt_long return value: %c\n", (char)opt);
+        }
+    }
     int i;
     for (i = 0; i < cmd->num_args; i++){
         if(strcmp((cmd->args[i]), "cat") == 0){
-            cat(fp, __INT_MAX__);
+            cat(fp, line_max);
         }
         else if(strcmp((cmd->args[i]), "head") == 0){
-            cat(fp, );
+            cat(fp, line_max);
         }
     }
 }
