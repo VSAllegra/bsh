@@ -186,6 +186,7 @@ cat(FILE * fp){
 
 static void
 evalcmd(struct cmd * cmd, FILE * fp){
+    int i;
     for (i = 0; i < cmd->num_args; i++){
         if(strcmp((cmd->args[i]), "cat") == 0){
             cat(fp);
