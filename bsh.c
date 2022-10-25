@@ -182,6 +182,7 @@ cat(FILE * fp){
         printf ("%c", c);
         c = fgetc(fp);
     }
+    printf("%c", '\n');
 }
 
 static void
