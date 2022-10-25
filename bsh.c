@@ -243,7 +243,7 @@ main(int argc, char *argv[])
         pipeline = pipeline_new(line);
     
         pipeline_print(pipeline);
-        list_first_entry(cmd, tmp, &pipeline->head)
+        list_first_entry(cmd, tmp, &pipeline->head);
         evalcmd(cmd);
         
 
