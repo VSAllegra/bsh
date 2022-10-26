@@ -277,7 +277,7 @@ pipeline_eval(struct pipeline * pipeline){
                 if (pipeline->out_file != NULL) {
                     wfd = open(pipeline->out_file, _O_WRONLY|_O_CREAT|_O_TRUNC, 0664);
                     if (wfd == -1){
-                        mu_die_errno(errno, "can't open %s", pipeline->in_fule);
+                        mu_die_errno(errno, "can't open %s", pipeline->in_file);
                     }
                 } else {
                     wfd = STDOUT_FILENO;
@@ -285,7 +285,7 @@ pipeline_eval(struct pipeline * pipeline){
             } else{
                 wfd = pfd[1];
             }
-            
+
             if(wfd != STDOUT_FILENO){
                 dup2(wfd, STDOUT_FILENO);
                 close(wfd);
