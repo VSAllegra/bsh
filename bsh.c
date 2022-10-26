@@ -277,8 +277,8 @@ pipeline_eval(struct pipeline * pipeline){
                 dup2(wfd, STDOUT_FILENO);
                 close(wfd);
             }
-
-            execvp(cmd->args[0], cmd->cap_args);
+            
+            execvp(cmd->args[0], cmd->cmd_args);
             mu_die_errno(errno, "can't exec \" %s \"", cmd->args[0]);
         }
 
