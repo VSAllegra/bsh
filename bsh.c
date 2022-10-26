@@ -275,7 +275,7 @@ pipeline_eval(struct pipeline * pipeline){
             /* adjust stdout*/
             if(cmd_idx == pipeline->num_cmds - 1 ){
                 if (pipeline->out_file != NULL) {
-                    wfd = open(pipeline->out_file, _O_WRONLY|_O_CREAT|_O_TRUNC, 0664);
+                    wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
                     if (wfd == -1){
                         mu_die_errno(errno, "can't open %s", pipeline->in_file);
                     }
