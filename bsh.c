@@ -254,7 +254,7 @@ pipeline_eval(struct pipeline * pipeline){
 
             if(cmd_idx == 0){
                 if (pipeline->in_file != NULL){
-                    print("INFILE : %s \n", pipeline->in_file);
+                    printf("INFILE : %s \n", pipeline->in_file);
                     rfd = open(pipeline->in_file, O_RDONLY);
                     if (rfd == -1)
                         mu_die_errno(errno, "can't open %s", pipeline->in_file);
@@ -275,7 +275,7 @@ pipeline_eval(struct pipeline * pipeline){
             /* adjust stdout*/
             if(cmd_idx == (pipeline->num_cmds - 1)){
                 if (pipeline->out_file != NULL) {
-                    print("OUTFILE : %s", pipeline->out_file);
+                    printf("OUTFILE : %s", pipeline->out_file);
                     wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
                     if (wfd == -1)
                         mu_die_errno(errno, "can't open %s", pipeline->out_file);
