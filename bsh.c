@@ -243,7 +243,7 @@ pipeline_eval(struct pipeline * pipeline){
         if (pid == 0){ /* child */
             /* adjust stdin*/
             if (created_pipe){
-                printf("%d", pfd[0]);
+                printf("%d %d %d", pfd[0], pfd[1], pfd[2]);
                 err = close(pfd[0]);
                 if (err = -1){
                     mu_die_errno(errno, "child failed to close read end");
