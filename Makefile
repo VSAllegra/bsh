@@ -1,6 +1,6 @@
 CFLAGS = -Wall -Wextra -Werror
 
-bash: bsh.c list.h mu.c mu.h
+bsh: bsh.c list.h mu.c mu.h
 	gcc -o $@ $^
 
 clean:

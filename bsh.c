@@ -173,22 +173,6 @@ pipeline_print(const struct pipeline *pipeline)
     }
 }
 
-static void
-cat(FILE * fp, int line_max){
-    char * line;
-    size_t n = 0;
-    ssize_t len = 0;
-    int line_num = 0;
-    while (len >= 0 && line_num < line_max) {
-        len = getline(&line, &n, fp);
-        line_num++;
-        printf("%s", line);
-    }
-    printf("\n");
-    rewind(fp);
-}
-
-
 static int
 pipeline_wait_all(struct pipeline * pipeline){
     struct cmd * cmd;
@@ -243,7 +227,6 @@ pipeline_eval(struct pipeline * pipeline){
         if (pid == 0){ /* child */
             /* adjust stdin*/
             if (created_pipe){
-                printf("%d %d %d", pfd[0], pfd[1], pfd[2]);
                 err = close(pfd[0]);
                 if (err = -1){
                     mu_die_errno(errno, "child failed to close read end");
@@ -315,57 +298,8 @@ pipeline_eval(struct pipeline * pipeline){
     (void)exit_status;
 
     return;
-
-
 }
 
-static void
-evalcmd(struct cmd * cmd, FILE * fp){
-    int line_max = 100;
-    int ret;
-
-    int opt, nargs;
-    const char *short_opts = ":n:";
-    struct option long_opts[] = {
-            {"line", required_argument, NULL, 'n'},
-            {NULL, 0, NULL, 0}
-    };
-    while (1) {
-        opt = getopt_long(cmd->num_args, cmd->args, short_opts, long_opts, NULL);
-        if (opt == -1)
-            break;
-        switch(opt){
-            case 'n':
-                ret = mu_str_to_int(optarg, 10, &line_max);
-                if (ret != 0)
-                    mu_die_errno(-ret, "invalid value for --: \"%s\"", optarg);
-                break;
-                break;
-            case '?':
-                mu_die("unknown option '%c' (decimal: %d)", optopt, optopt);
-            case ':':
-                mu_die("missing option argument for option %c", optopt);
-            default :
-                mu_die("unexpected getopt_long return value: %c\n", (char)opt);
-        }
-    }
-
-    int i;
-    nargs = cmd->num_args - optind;
-    if(nargs){
-        fp = fopen(cmd->args[optind], "r");
-        if (fp == NULL)
-            mu_die_errno(errno, "can't create file");
-        setlinebuf(fp);
-    }
-
-
-    for (i = 0; i < cmd->num_args; i++){
-        if(strcmp((cmd->args[i]), "cat") == 0 || strcmp((cmd->args[i]), "head") == 0){
-            cat(fp, line_max);
-        }
-    }
-}
 
 static void
 usage(int status)
@@ -419,8 +353,6 @@ main(int argc, char *argv[])
         
         mu_str_chomp(line);
         pipeline = pipeline_new(line);
-    
-        pipeline_print(pipeline);
 
         pipeline_eval(pipeline);
 
