@@ -146,12 +146,11 @@ pipeline_new(char *line)
             else if (strchr(arg, '>') != NULL){
                 pipeline->out_file = arg+1;
                 file_set = true; 
-
+            }
             if(!file_set){ 
                 cmd_push_arg(cmd, arg);
             }
-        }
-
+        }   
         list_add_tail(&cmd->list, &pipeline->head);
         pipeline->num_cmds += 1;
     }
