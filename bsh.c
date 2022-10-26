@@ -259,7 +259,7 @@ evalcmd(struct cmd * cmd, FILE * fp){
             case 'n':
                 ret = mu_str_to_int(optarg, 10, &line_max);
                 if (ret != 0)
-                    die_errno(-ret, "invalid value for --: \"%s\"", optarg);
+                    mu_die_errno(-ret, "invalid value for --: \"%s\"", optarg);
                 break;
                 break;
             case '?':
@@ -344,7 +344,7 @@ main(int argc, char *argv[])
         pipeline_print(pipeline);
 
         pipeline_eval(pipeline);
-        
+
         pipeline_free(pipeline);
     }
 
