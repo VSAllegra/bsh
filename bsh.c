@@ -244,7 +244,7 @@ pipeline_eval(struct pipeline * pipeline){
 
         if (pid == 0){ /* child */
             /* adjust stdin*/
-            printf("CREATED_PIPE: %s\n", created_pipe);
+            printf("CREATED_PIPE: %d\n", created_pipe);
             printf("cmd_idx: %d \n", cmd_idx);
             if (created_pipe){
                 err = close(pfd[0]);
