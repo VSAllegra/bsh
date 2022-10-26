@@ -305,10 +305,12 @@ pipeline_eval(struct pipeline * pipeline){
             prev_rfd = pfd[0];
         }
         cmd_idx++;
-    }
 
-    exit_status = pipeline_wait_all(pipeline);
-    (void)exit_status;
+        
+        exit_status = pipeline_wait_all(pipeline);
+        (void)exit_status;
+
+    }
 
     return;
 }
