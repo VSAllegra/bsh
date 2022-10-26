@@ -224,6 +224,7 @@ pipeline_eval(struct pipeline * pipeline){
     int pfd[2];
     bool created_pipe = false;
     int rfd, prev_rfd, wfd = -1;
+    FILE * fp;
 
     pipeline_print(pipeline);
 
@@ -282,7 +283,6 @@ pipeline_eval(struct pipeline * pipeline){
                 if (pipeline->out_file != NULL) {
                     //printf("OUTFILE : %s", pipeline->out_file);
                     if(pipeline->append){
-                        FILE * fp;
                         fp = fopen(pipeline->out_file, "r+");
                         if(fp == NULL){
                             mu_die_errno(errno, "can't open %s", pipeline->out_file);
@@ -330,7 +330,7 @@ pipeline_eval(struct pipeline * pipeline){
 
     exit_status = pipeline_wait_all(pipeline);
     (void)exit_status;
-    if(fp != NULL) 
+    if(fp != NULL)
         close(fp);
 
     return;
