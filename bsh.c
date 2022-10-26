@@ -236,7 +236,7 @@ pipeline_eval(struct pipeline * piepline){
          cmd->pid = pid;
     }
 
-    exit_status = pipeline_wait_all(pipeline)
+    exit_status = pipeline_wait_all(pipeline);
 
 }
 
