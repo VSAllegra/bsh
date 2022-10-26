@@ -211,7 +211,6 @@ pipeline_wait_all(struct pipeline * pipeline){
             exit_status = 128 + WTERMSIG(wstatus);
         }
 
-    }
     return exit_status;
 }
 
@@ -225,6 +224,8 @@ pipeline_eval(struct pipeline * pipeline){
     int pfd[2];
     bool created_pipe = false;
     int rfd, prev_rfd, wfd = -1;
+
+    pipeline_print(pipeline);
 
     //pipeline_print(pipeline);
 
@@ -281,7 +282,12 @@ pipeline_eval(struct pipeline * pipeline){
                 if (pipeline->out_file != NULL) {
                     //printf("OUTFILE : %s", pipeline->out_file);
                     if(pipeline->append){
-                        wfd = pfd[1];
+                        FILE * fp;
+                        fp = fopen(pipeline->out_file, "r+");
+                        if(fp == NULL){
+                            mu_die_errno(errno, "can't open %s", pipeline->out_file);
+                        }
+                        wfd = fileno(fp);
                     }
                     else{   
                         wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
@@ -324,6 +330,8 @@ pipeline_eval(struct pipeline * pipeline){
 
     exit_status = pipeline_wait_all(pipeline);
     (void)exit_status;
+    if(fp != NULL) 
+        close(fp);
 
     return;
 }
