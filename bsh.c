@@ -229,7 +229,8 @@ pipeline_eval(struct pipeline * pipeline){
             created_pipe = true;
         }
 
-
+        printf("New Child Made for :");
+        cmd_print(cmd);
         pid = fork();
         if (pid == -1){
             mu_die_errno(errno, "fork");
