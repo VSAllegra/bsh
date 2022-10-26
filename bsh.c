@@ -223,7 +223,7 @@ pipeline_eval(struct pipeline * pipeline){
     int err;
     int pfd[2];
     bool created_pipe = false;
-    int * rfd, prev_rfd, wfd = -1;
+    int rfd, prev_rfd, wfd = -1;
 
     list_for_each_entry(cmd, &pipeline->head, list) {
         created_pipe = false;
