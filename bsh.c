@@ -136,6 +136,12 @@ pipeline_new(char *line)
             arg = strtok_r(s2, " \t", &saveptr2);
             if (arg == NULL)
                 break;
+            if (strchr(arg, '<') != NULL){
+                pipeline->in_file = arg[1:];
+            }
+            if (strchr(arg, '>') != NULL){
+                pipeline->out_file = arg[1:];
+            }
             cmd_push_arg(cmd, arg);
         }
 
