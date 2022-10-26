@@ -255,24 +255,37 @@ pipeline_eval(struct pipeline * pipeline){
             }
 
             if(cmd_idx == 0){
-                rfd = STDIN_FILENO;
-            }
-            else{
+                if (pipeline->in_file != NULL){
+                    rfd = open(pipeline->in_file, O_RDONLY);
+                    if (rfd == -1){
+                        mu_die_errno(errno, "can't open %s", pipeline->in_file);
+                    }
+                } else{
+                    rfd = STDIN_FILENO;
+                }
+            } else{
                 rfd = prev_rfd;
             }
-            if(rfd != STDIN_FILENO){
+
+            if (rfd !- STDIN_FILENO){
                 dup2(rfd, STDIN_FILENO);
                 close(rfd);
             }
 
             /* adjust stdout*/
             if(cmd_idx == pipeline->num_cmds - 1 ){
-                wfd = STDOUT_FILENO;
-            }
-            else{
+                if (pipeline->out_file != NULL) {
+                    wfd = open(pipeline->out_file, _O_WRONLY|_O_CREAT|_O_TRUNC, 0664);
+                    if (wfd == -1){
+                        mu_die_errno(errno, "can't open %s", pipeline->in_fule);
+                    }
+                } else {
+                    wfd = STDOUT_FILENO;
+                }
+            } else{
                 wfd = pfd[1];
             }
-
+            
             if(wfd != STDOUT_FILENO){
                 dup2(wfd, STDOUT_FILENO);
                 close(wfd);
