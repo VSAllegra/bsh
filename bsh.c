@@ -218,7 +218,7 @@ pipeline_wait_all(struct pipeline * pipeline){
 }
 
 static void
-pipeline_eval(struct pipeline * piepline){
+pipeline_eval(struct pipeline * pipeline){
     struct cmd * cmd;
     pid_t pid;
     int exit_status;
