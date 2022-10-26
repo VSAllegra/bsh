@@ -259,11 +259,11 @@ pipeline_eval(struct pipeline * pipeline){
                     if (rfd == -1)
                         mu_die_errno(errno, "can't open %s", pipeline->in_file);
                 } else{
-                    printf("STDIN_FILENO \n")
+                    printf("STDIN_FILENO \n");
                     rfd = STDIN_FILENO;
                 }
             } else{
-                printf("prev_rfd \n")
+                printf("prev_rfd \n");
                 rfd = prev_rfd;
             }
 
@@ -280,9 +280,11 @@ pipeline_eval(struct pipeline * pipeline){
                     if (wfd == -1)
                         mu_die_errno(errno, "can't open %s", pipeline->out_file);
                 } else {
+                    printf("STDOUT_FILENO \n");
                     wfd = STDOUT_FILENO;
                 }
             } else{
+                printf("pfd[1] \n");
                 wfd = pfd[1];
             }
 
