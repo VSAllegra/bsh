@@ -189,7 +189,7 @@ cat(FILE * fp, int line_max){
 }
 
 
-static void
+static int
 pipeline_wait_all(struct pipeline * pipeline){
     struct cmd * cmd;
     pid_t pid;
@@ -221,22 +221,79 @@ static void
 pipeline_eval(struct pipeline * piepline){
     struct cmd * cmd;
     pid_t pid;
+    int exit_status;
+    int cmd_idx = 0;
+    int err;
+    int pfd[2];
+    bool created_pipe = false;
+    int * rfd;
+    int * prev_rfd;
+    int * wfd;
 
     list_for_each_entry(cmd, &pipeline->head, list) {
+        created_pipe = false;
+
+        if ((pipeline->num_cmds > 1) && (cmd_idx != pipeline->num_cmds -1 ){
+            err = pipe(pfd);
+            if (err == -1){
+                mu_die_errno(errno, "pipe");
+            }
+            created_pipe = true;
+        }
+
         pid = fork();
-        switch(pid){
-            case -1:
-                mu_die_errno(errno, "fork");
+        if (pid == -1){
+            mu_die_errno(errno, "fork");
                 break;
 
-            case 0: /* child */
-                execvp(cmd->args[0], cmd->cap_args);
-                mu_die_errno(errno, "can't exec \" %s \"", cmd->args[0]);
+        if (pid == 0){ /* child */
+
+            /* adjust stdin*/
+            if (created_pipe){
+                err = close(pfd[0]);
+                if (err = -1){
+                    mu_die_errno(errno, "child failed to close read end");
+                }
+            }
+
+            if(cmd_idx == 0){
+                rfd = STDIN_FILENO;
+            }
+            else{
+                rfd = prev_rfd;
+            }
+            if(rfd != STDIN_FILENO){
+                dup2(rfd, STDIN_FILENO);
+                close(rfd);
+            }
+
+            /* adjust stdout*/
+            if(cmd_idx == pipeline->num_cmds - 1 )){
+                wfd = STDOUT_FILENO;
+            }
+            else{
+                wfd = pfd[1];
+            }
+            if(wfd != STDOUT_FILENO){
+                dup2(wfd, STDOUT_FILENO);
+                close(wfd);
+            }
+
+            execvp(cmd->args[0], cmd->cap_args);
+            mu_die_errno(errno, "can't exec \" %s \"", cmd->args[0]);
         }
-         cmd->pid = pid;
+
+        /* parent*/
+        cmd->pid = pid;
+        (void) created_pipe;
+        cmd_idx++;
     }
 
     exit_status = pipeline_wait_all(pipeline);
+    (void)exit_status;
+
+    return;
+
 
 }
 
