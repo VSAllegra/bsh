@@ -268,12 +268,13 @@ pipeline_eval(struct pipeline * piepline){
             }
 
             /* adjust stdout*/
-            if(cmd_idx == pipeline->num_cmds - 1 )){
+            if(cmd_idx == pipeline->num_cmds - 1 ){
                 wfd = STDOUT_FILENO;
             }
             else{
                 wfd = pfd[1];
             }
+
             if(wfd != STDOUT_FILENO){
                 dup2(wfd, STDOUT_FILENO);
                 close(wfd);
