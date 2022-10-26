@@ -245,6 +245,7 @@ pipeline_eval(struct pipeline * piepline){
         if (pid == -1){
             mu_die_errno(errno, "fork");
                 break;
+        }
 
         if (pid == 0){ /* child */
 
