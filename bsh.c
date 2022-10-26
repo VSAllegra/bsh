@@ -355,6 +355,7 @@ main(int argc, char *argv[])
         pipeline = pipeline_new(line);
 
         pipeline_eval(pipeline);
+        printf("\n");
 
         pipeline_free(pipeline);
     }
