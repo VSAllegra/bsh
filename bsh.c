@@ -136,7 +136,6 @@ pipeline_new(char *line)
         for (s2 = command; ; s2 = NULL) {
             file_set = false;
             arg = strtok_r(s2, " \t", &saveptr2);
-            printf("ARG : %s \n" , arg);
             if (arg == NULL)
                 break;
             if (strchr(arg, '<') != NULL){
