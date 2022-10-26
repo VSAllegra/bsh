@@ -308,8 +308,6 @@ pipeline_eval(struct pipeline * pipeline){
 
         if(created_pipe){
             err = close(pfd[1]);
-            if (err = -1)
-                mu_die_errno(errno, "parent failed to close write end");
             prev_rfd = pfd[0];
         }
 
