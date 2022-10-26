@@ -136,30 +136,25 @@ pipeline_new(char *line)
         for (s2 = command; ; s2 = NULL) {
             file_set = false;
             arg = strtok_r(s2, " \t", &saveptr2);
+            printf("ARG : %s \n" , arg);
             if (arg == NULL)
                 break;
-            cmd_push_arg(cmd, arg);
+            if (strchr(arg, '<') != NULL){
+                pipeline->in_file = arg+1;
+                file_set = true;
+            }
+            else if (strchr(arg, '>') != NULL){
+                pipeline->out_file = arg+1;
+                file_set = true; 
+
+            if(!file_set){ 
+                cmd_push_arg(cmd, arg);
+            }
         }
 
         list_add_tail(&cmd->list, &pipeline->head);
         pipeline->num_cmds += 1;
     }
-
-    list_for_each_entry(cmd, &pipeline->head, list) {
-        for (i = 0; i < cmd->num_args; i++){
-            arg = cmd->args[i];
-            if (strchr(arg, '<') != NULL){
-                pipeline->in_file = arg+1;
-                cmd_pop_arg(cmd);
-            }
-            if (strchr(arg, '>') != NULL){
-                pipeline->out_file = arg+1;
-                cmd_pop_arg(cmd);
-            }
-        }
-    }
-
-
     /* TODO: parse I/O redirects */
 
     return pipeline;
