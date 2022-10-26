@@ -263,8 +263,7 @@ pipeline_eval(struct pipeline * pipeline){
                 if (pipeline->out_file != NULL) {
                     wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
                     if (wfd == -1){
-                        printf("OUTFILE : %s \n" , pipeline->out_file);
-                        mu_die_errno(errno, "can't open %s", pipeline->in_file);
+                        mu_die_errno(errno, "can't open %s", pipeline->out_file);
                     }
                 } else {
                     wfd = STDOUT_FILENO;
