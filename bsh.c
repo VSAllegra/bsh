@@ -364,6 +364,8 @@ main(int argc, char *argv[])
         mu_str_chomp(line);
         pipeline = pipeline_new(line);
 
+        pipeline_print(pipeline);
+
         pipeline_eval(pipeline);
 
         pipeline_free(pipeline);
