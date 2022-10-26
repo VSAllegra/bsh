@@ -149,13 +149,14 @@ pipeline_new(char *line)
         for (i = 0; i < cmd->num_args; i++){
             arg = cmd->args[i];
             if (strchr(arg, '<') != NULL){
-                pipeline->in_file = arg + 1;
+                mu_strlcpy(pipeline->in_file, arg+1, size_of(*(arg+1)));
+                cmd_pop_arg(cmd);
             }
             if (strchr(arg, '>') != NULL){
-                pipeline->out_file = arg + 1;
+                mu_strlcpy(pipeline->out_file, arg+1, size_of(*(arg+1)));
+                cmd_pop_arg(cmd);
             }
         }
-
     }
 
 
