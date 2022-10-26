@@ -248,8 +248,6 @@ pipeline_eval(struct pipeline * pipeline){
             printf("cmd_idx: %d \n", cmd_idx);
             if (created_pipe){
                 err = close(pfd[0]);
-                if (err = -1)
-                    mu_die_errno(errno, "child failed to close read end");
             }
 
             if(cmd_idx == 0){
