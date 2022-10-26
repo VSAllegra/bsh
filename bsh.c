@@ -283,7 +283,7 @@ pipeline_eval(struct pipeline * pipeline){
                 if (pipeline->out_file != NULL) {
                     //printf("OUTFILE : %s", pipeline->out_file);
                     if(pipeline->append){
-                        fp = fopen(pipeline->out_file, "r+");
+                        fp = fopen(pipeline->out_file, "a");
                         if(fp == NULL){
                             mu_die_errno(errno, "can't open %s", pipeline->out_file);
                         }
