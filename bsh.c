@@ -143,7 +143,14 @@ pipeline_new(char *line)
                 file_set = true;
             }
             else if (strchr(arg, '>') != NULL){
-                pipeline->out_file = arg+1;
+                if(strchr(arg+1, '>') != NULL){
+                    pipeline->append = true;
+                    pipeline->out_file = arg+2;
+                }
+                else{
+                    pipeline->append = false;
+                    pipeline->out_file = arg+1;
+                }
                 file_set = true; 
             }
             if(!file_set){ 
@@ -273,9 +280,11 @@ pipeline_eval(struct pipeline * pipeline){
             if(cmd_idx == (pipeline->num_cmds - 1)){
                 if (pipeline->out_file != NULL) {
                     //printf("OUTFILE : %s", pipeline->out_file);
-                    wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
-                    if (wfd == -1)
-                        mu_die_errno(errno, "can't open %s", pipeline->out_file);
+                    if(!((wfd != - 1) && pipeline->append)){
+                        wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
+                        if (wfd == -1)
+                            mu_die_errno(errno, "can't open %s", pipeline->out_file);
+                    }
                 } else {
                     //printf("STDOUT_FILENO \n");
                     wfd = STDOUT_FILENO;
