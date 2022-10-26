@@ -243,6 +243,7 @@ pipeline_eval(struct pipeline * pipeline){
         if (pid == 0){ /* child */
             /* adjust stdin*/
             if (created_pipe){
+                printf("%d", pfd[0]);
                 err = close(pfd[0]);
                 if (err = -1){
                     mu_die_errno(errno, "child failed to close read end");
@@ -305,6 +306,7 @@ pipeline_eval(struct pipeline * pipeline){
             if (err = -1){
                 mu_die_errno(errno, "parent failed to close write end");
             }
+            prev_rfd = pfd[0];
         }
         cmd_idx++;
     }
