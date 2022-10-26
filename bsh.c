@@ -140,6 +140,7 @@ pipeline_new(char *line)
                 break;
             if (strchr(arg, '<') != NULL){
                 pipeline->in_file = arg + 1;
+                args++;
             }
             if (strchr(arg, '>') != NULL){
                 pipeline->out_file = arg + 1;
