@@ -210,7 +210,7 @@ pipeline_wait_all(struct pipeline * pipeline){
         else if (WIFSIGNALED(wstatus)){
             exit_status = 128 + WTERMSIG(wstatus);
         }
-
+    }
     return exit_status;
 }
 
