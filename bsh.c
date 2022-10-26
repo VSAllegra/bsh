@@ -219,7 +219,7 @@ pipeline_eval(struct pipeline * pipeline){
     bool created_pipe = false;
     int rfd, prev_rfd, wfd = -1;
 
-    pipeline_print(pipeline);
+    //pipeline_print(pipeline);
 
     list_for_each_entry(cmd, &pipeline->head, list) {
         created_pipe = false;
@@ -232,36 +232,35 @@ pipeline_eval(struct pipeline * pipeline){
             }
         }
 
-        printf("New Child Made for :");
-        cmd_print(cmd);
+        //printf("New Child Made for :");
+        //cmd_print(cmd);
 
         pid = fork();
         if (pid == -1){
             mu_die_errno(errno, "fork");
         }
 
-        printf("PID : %d \n", pid);
+        //printf("PID : %d \n", pid);
 
         if (pid == 0){ /* child */
             /* adjust stdin*/
-            printf("CREATED_PIPE: %d\n", created_pipe);
-            printf("cmd_idx: %d \n", cmd_idx);
+            //printf("CREATED_PIPE: %d\n", created_pipe);
             if (created_pipe){
                 err = close(pfd[0]);
             }
 
             if(cmd_idx == 0){
                 if (pipeline->in_file != NULL){
-                    printf("INFILE : %s \n", pipeline->in_file);
+                    //printf("INFILE : %s \n", pipeline->in_file);
                     rfd = open(pipeline->in_file, O_RDONLY);
                     if (rfd == -1)
                         mu_die_errno(errno, "can't open %s", pipeline->in_file);
                 } else{
-                    printf("STDIN_FILENO \n");
+                    //printf("STDIN_FILENO \n");
                     rfd = STDIN_FILENO;
                 }
             } else{
-                printf("prev_rfd \n");
+                //printf("prev_rfd \n");
                 rfd = prev_rfd;
             }
 
@@ -273,16 +272,16 @@ pipeline_eval(struct pipeline * pipeline){
             /* adjust stdout*/
             if(cmd_idx == (pipeline->num_cmds - 1)){
                 if (pipeline->out_file != NULL) {
-                    printf("OUTFILE : %s", pipeline->out_file);
+                    //printf("OUTFILE : %s", pipeline->out_file);
                     wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
                     if (wfd == -1)
                         mu_die_errno(errno, "can't open %s", pipeline->out_file);
                 } else {
-                    printf("STDOUT_FILENO \n");
+                    //printf("STDOUT_FILENO \n");
                     wfd = STDOUT_FILENO;
                 }
             } else{
-                printf("pfd[1] \n");
+                //printf("pfd[1] \n");
                 wfd = pfd[1];
             }
 
@@ -295,7 +294,7 @@ pipeline_eval(struct pipeline * pipeline){
             mu_die_errno(errno, "can't exec \" %s \"", cmd->args[0]);
         }
 
-        printf("Parent\n");
+        //printf("Parent\n");
         /* parent*/
         cmd->pid = pid;
 
