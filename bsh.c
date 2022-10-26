@@ -188,6 +188,58 @@ cat(FILE * fp, int line_max){
     rewind(fp);
 }
 
+
+static void
+pipeline_wait_all(struct pipeline * pipeline){
+    struct cmd * cmd;
+    pid_t pid;
+    int wstatus;
+    int exit_status = 0;
+
+    list_for_each_entry(cmd, &pipeline->head, list){
+        assert(cmd->pid);
+
+        pid = waitpid(cmd->pid, &wstatus, 0);
+        if (pid == -1){
+            mu_die_errno(errno, "waitpid");
+        }
+        if (WIFEXITED(wstatus)){
+            exit_status = WEXITED(wstatus);
+        }
+        else if (WIFSIGNALED(wstatus)){
+            exit_status = WWEXITSTATUS(wstatus);
+        }
+        else if (WIFSIGNALED(wstatus)){
+            exit_status = 128 + WTERMSIG(wstatus);
+        }
+
+    }
+    return exit_status;
+}
+
+static void
+pipeline_eval(struct pipeline * piepline){
+    struct cmd * cmd;
+    pid_t pid;
+
+    list_for_each_entry(cmd, &pipeline->head, list) {
+        pid = fork();
+        switch(pid){
+            case -1:
+                mu_die_errno(errno, "fork");
+                break;
+
+            case 0: /* child */
+                execvp(cmd->args[0], cmd->cap_args);
+                mu_die_errno(errno, "can't exec \" %s \"", cmd->args[0]);
+        }
+         cmd->pid = pid;
+    }
+
+    exit_status = pipeline_wait_all(pipeline)
+
+}
+
 static void
 evalcmd(struct cmd * cmd, FILE * fp){
     int line_max = 100;
@@ -290,12 +342,9 @@ main(int argc, char *argv[])
         pipeline = pipeline_new(line);
     
         pipeline_print(pipeline);
-        list_for_each_entry(cmd, &pipeline->head, list) {
-            evalcmd(cmd, fp);
-        }
-        
-        
 
+        pipeline_eval(pipeline);
+        
         pipeline_free(pipeline);
     }
 
