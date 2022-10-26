@@ -224,7 +224,7 @@ pipeline_eval(struct pipeline * pipeline){
             }
             created_pipe = true;
         }
-        printf(pipeline->out_file);
+        printf("OUTFILE : %s \n" , pipeline->out_file);
 
         pid = fork();
         if (pid == -1){
