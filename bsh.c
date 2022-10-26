@@ -267,7 +267,7 @@ pipeline_eval(struct pipeline * pipeline){
                 rfd = prev_rfd;
             }
 
-            if (rfd !- STDIN_FILENO){
+            if (rfd != STDIN_FILENO){
                 dup2(rfd, STDIN_FILENO);
                 close(rfd);
             }
