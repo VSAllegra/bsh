@@ -240,7 +240,7 @@ pipeline_eval(struct pipeline * pipeline){
             mu_die_errno(errno, "fork");
         }
 
-        printf("PID : %d", pid);
+        printf("PID : %d \n", pid);
 
         if (pid == 0){ /* child */
             /* adjust stdin*/
