@@ -137,10 +137,13 @@ pipeline_new(char *line)
             if (arg == NULL)
                 break;
             if (strchr(arg, '<') != NULL){
-                pipeline->in_file = arg + 1;
+                arg++;
+                pipeline->in_file = arg;
+                
             }
             if (strchr(arg, '>') != NULL){
-                pipeline->out_file = arg + 1;
+                arg++;
+                pipeline->out_file = arg;
             }
             cmd_push_arg(cmd, arg);
         }
