@@ -301,9 +301,6 @@ pipeline_eval(struct pipeline * pipeline){
 
         if(cmd_idx != 0){
             err = close(prev_rfd);
-            if (err = -1){
-                mu_die_errno(errno, "parent failed to close read end");
-            }
         }
 
         if(created_pipe){
