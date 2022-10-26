@@ -120,6 +120,7 @@ pipeline_new(char *line)
     char *s1, *s2, *command, *arg;
     char *saveptr1, *saveptr2;
     int i;
+    bool file_set = false;
 
     INIT_LIST_HEAD(&pipeline->head);
 
@@ -133,17 +134,20 @@ pipeline_new(char *line)
 
         /* parse the args of a single command */
         for (s2 = command; ; s2 = NULL) {
+            file_set = false;
             arg = strtok_r(s2, " \t", &saveptr2);
             if (arg == NULL)
                 break;
             if (strchr(arg, '<') != NULL){
                 pipeline->in_file = arg + 1;
-                
+                file_set = true;
             }
             if (strchr(arg, '>') != NULL){
                 pipeline->out_file = arg + 1;
+                file_set = true;
             }
-            cmd_push_arg(cmd, arg);
+            if(!file_set)
+                cmd_push_arg(cmd, arg);
         }
 
         list_add_tail(&cmd->list, &pipeline->head);
@@ -261,7 +265,6 @@ pipeline_eval(struct pipeline * pipeline){
 
             /* adjust stdout*/
             if(cmd_idx == pipeline->num_cmds - 1 ){
-                printf("%s", pipeline->out_file);
                 if (pipeline->out_file != NULL) {
                     wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
                     if (wfd == -1){
