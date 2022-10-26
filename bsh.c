@@ -227,8 +227,6 @@ pipeline_eval(struct pipeline * pipeline){
 
     list_for_each_entry(cmd, &pipeline->head, list) {
         created_pipe = false;
-        prev_rfd = rfd;
-
         if ((pipeline->num_cmds > 1) && (cmd_idx != pipeline->num_cmds - 1)){
             err = pipe(pfd);
             if (err == -1){
@@ -240,7 +238,6 @@ pipeline_eval(struct pipeline * pipeline){
         pid = fork();
         if (pid == -1){
             mu_die_errno(errno, "fork");
-                break;
         }
 
         if (pid == 0){ /* child */
