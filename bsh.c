@@ -204,10 +204,7 @@ pipeline_wait_all(struct pipeline * pipeline){
             mu_die_errno(errno, "waitpid");
         }
         if (WIFEXITED(wstatus)){
-            exit_status = WEXITED(wstatus);
-        }
-        else if (WIFSIGNALED(wstatus)){
-            exit_status = WEXITSTATUS(wstatus);
+            exit_status = WEXITEDSTATUS(wstatus);
         }
         else if (WIFSIGNALED(wstatus)){
             exit_status = 128 + WTERMSIG(wstatus);
