@@ -221,7 +221,7 @@ pipeline_eval(struct pipeline * pipeline){
 
     list_for_each_entry(cmd, &pipeline->head, list) {
         created_pipe = false;
-        if ((pipeline->num_cmds > 1)){
+        if ((pipeline->num_cmds > 1) && (cmd_idx != pipeline->num_cmds - 1)){
             err = pipe(pfd);
             if (err == -1){
                 mu_die_errno(errno, "pipe");
@@ -286,6 +286,7 @@ pipeline_eval(struct pipeline * pipeline){
             mu_die_errno(errno, "can't exec \" %s \"", cmd->args[0]);
         }
 
+        printf("Parent\n");
         /* parent*/
         cmd->pid = pid;
 
