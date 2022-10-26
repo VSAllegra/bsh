@@ -219,6 +219,8 @@ pipeline_eval(struct pipeline * pipeline){
     bool created_pipe = false;
     int rfd, prev_rfd, wfd = -1;
 
+    pipeline_print(pipeline);
+
     list_for_each_entry(cmd, &pipeline->head, list) {
         created_pipe = false;
         if ((pipeline->num_cmds > 1) && (cmd_idx != pipeline->num_cmds - 1)){
