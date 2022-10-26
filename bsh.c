@@ -271,7 +271,6 @@ pipeline_eval(struct pipeline * pipeline){
             }
 
             execvp(cmd->args[0], cmd->args);
-            printf("\n");
             mu_die_errno(errno, "can't exec \" %s \"", cmd->args[0]);
         }
 
