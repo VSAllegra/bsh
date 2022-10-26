@@ -223,14 +223,13 @@ pipeline_eval(struct pipeline * pipeline){
     int err;
     int pfd[2];
     bool created_pipe = false;
-    int * rfd;
-    int * prev_rfd;
-    int * wfd;
+    int * rfd, prev_rfd, wfd = -1;
 
     list_for_each_entry(cmd, &pipeline->head, list) {
         created_pipe = false;
+        prev_rfd = rfd;
 
-        if ((pipeline->num_cmds > 1) && (cmd_idx != pipeline->num_cmds -1 )){
+        if ((pipeline->num_cmds > 1) && (cmd_idx != pipeline->num_cmds - 1)){
             err = pipe(pfd);
             if (err == -1){
                 mu_die_errno(errno, "pipe");
@@ -245,7 +244,6 @@ pipeline_eval(struct pipeline * pipeline){
         }
 
         if (pid == 0){ /* child */
-            prev_rfd = rfd;
             /* adjust stdin*/
             if (created_pipe){
                 err = close(pfd[0]);
@@ -297,7 +295,20 @@ pipeline_eval(struct pipeline * pipeline){
 
         /* parent*/
         cmd->pid = pid;
-        (void) created_pipe;
+
+        if(cmd_idx != 0){
+            err = close(prev_rfd);
+            if (err = -1){
+                mu_die_errno(errno, "parent failed to close read end");
+            }
+        }
+
+        if(created_pipe){
+            err = close(pfd[1]);
+            if (err = -1){
+                mu_die_errno(errno, "parent failed to close write end");
+            }
+        }
         cmd_idx++;
     }
 
