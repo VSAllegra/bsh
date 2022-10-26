@@ -238,8 +238,12 @@ pipeline_eval(struct pipeline * pipeline){
             mu_die_errno(errno, "fork");
         }
 
+        printf("PID : %d", pid);
+
         if (pid == 0){ /* child */
             /* adjust stdin*/
+            printf("CREATED_PIPE: %s\n", created_pipe);
+            printf("cmd_idx: %d \n", cmd_idx);
             if (created_pipe){
                 err = close(pfd[0]);
                 if (err = -1)
@@ -248,13 +252,16 @@ pipeline_eval(struct pipeline * pipeline){
 
             if(cmd_idx == 0){
                 if (pipeline->in_file != NULL){
+                    print("INFILE : %s \n", pipeline->in_file);
                     rfd = open(pipeline->in_file, O_RDONLY);
                     if (rfd == -1)
                         mu_die_errno(errno, "can't open %s", pipeline->in_file);
                 } else{
+                    printf("STDIN_FILENO \n")
                     rfd = STDIN_FILENO;
                 }
             } else{
+                printf("prev_rfd \n")
                 rfd = prev_rfd;
             }
 
@@ -266,6 +273,7 @@ pipeline_eval(struct pipeline * pipeline){
             /* adjust stdout*/
             if(cmd_idx == (pipeline->num_cmds - 1)){
                 if (pipeline->out_file != NULL) {
+                    print("OUTFILE : %s", pipeline->out_file);
                     wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
                     if (wfd == -1)
                         mu_die_errno(errno, "can't open %s", pipeline->out_file);
