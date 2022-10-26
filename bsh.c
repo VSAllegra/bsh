@@ -280,7 +280,10 @@ pipeline_eval(struct pipeline * pipeline){
             if(cmd_idx == (pipeline->num_cmds - 1)){
                 if (pipeline->out_file != NULL) {
                     //printf("OUTFILE : %s", pipeline->out_file);
-                    if(!((wfd != - 1) && pipeline->append)){
+                    if(pipeline->append){
+                        wfd = pfd[1];
+                    }
+                    else{   
                         wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
                         if (wfd == -1)
                             mu_die_errno(errno, "can't open %s", pipeline->out_file);
