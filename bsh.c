@@ -222,10 +222,12 @@ pipeline_eval(struct pipeline * pipeline){
     list_for_each_entry(cmd, &pipeline->head, list) {
         created_pipe = false;
         if ((pipeline->num_cmds > 1) && (cmd_idx != pipeline->num_cmds - 1)){
-            err = pipe(pfd);
-            if (err == -1)
-                mu_die_errno(errno, "pipe");
-            created_pipe = true;
+            if(!created_pipe){
+                err = pipe(pfd);
+                if (err == -1)
+                    mu_die_errno(errno, "pipe");
+                created_pipe = true;
+            }
         }
 
         printf("New Child Made for :");
@@ -300,7 +302,7 @@ pipeline_eval(struct pipeline * pipeline){
                 mu_die_errno(errno, "parent failed to close write end");
             prev_rfd = pfd[0];
         }
-        
+
         cmd_idx++;
     }
 
