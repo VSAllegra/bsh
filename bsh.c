@@ -233,7 +233,7 @@ pipeline_eval(struct pipeline * piepline){
     list_for_each_entry(cmd, &pipeline->head, list) {
         created_pipe = false;
 
-        if ((pipeline->num_cmds > 1) && (cmd_idx != pipeline->num_cmds -1 ){
+        if ((pipeline->num_cmds > 1) && (cmd_idx != pipeline->num_cmds -1 )){
             err = pipe(pfd);
             if (err == -1){
                 mu_die_errno(errno, "pipe");
