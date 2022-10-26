@@ -137,13 +137,11 @@ pipeline_new(char *line)
             if (arg == NULL)
                 break;
             if (strchr(arg, '<') != NULL){
-                arg++;
-                pipeline->in_file = arg;
+                pipeline->in_file = arg + 1;
                 
             }
             if (strchr(arg, '>') != NULL){
-                arg++;
-                pipeline->out_file = arg;
+                pipeline->out_file = arg + 1;
             }
             cmd_push_arg(cmd, arg);
         }
@@ -263,6 +261,7 @@ pipeline_eval(struct pipeline * pipeline){
 
             /* adjust stdout*/
             if(cmd_idx == pipeline->num_cmds - 1 ){
+                printf("%s", pipeline->out_file);
                 if (pipeline->out_file != NULL) {
                     wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
                     if (wfd == -1){
@@ -363,8 +362,6 @@ main(int argc, char *argv[])
         
         mu_str_chomp(line);
         pipeline = pipeline_new(line);
-
-        pipeline_print(pipeline);
 
         pipeline_eval(pipeline);
 
