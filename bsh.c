@@ -245,7 +245,7 @@ pipeline_eval(struct pipeline * pipeline){
         }
 
         if (pid == 0){ /* child */
-
+            prev_rfd = rfd;
             /* adjust stdin*/
             if (created_pipe){
                 err = close(pfd[0]);
