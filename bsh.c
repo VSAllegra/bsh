@@ -223,14 +223,14 @@ pipeline_eval(struct pipeline * pipeline){
         created_pipe = false;
         if ((pipeline->num_cmds > 1) && (cmd_idx != pipeline->num_cmds - 1)){
             err = pipe(pfd);
-            if (err == -1){
+            if (err == -1)
                 mu_die_errno(errno, "pipe");
-            }
             created_pipe = true;
         }
 
         printf("New Child Made for :");
         cmd_print(cmd);
+
         pid = fork();
         if (pid == -1){
             mu_die_errno(errno, "fork");
@@ -240,17 +240,15 @@ pipeline_eval(struct pipeline * pipeline){
             /* adjust stdin*/
             if (created_pipe){
                 err = close(pfd[0]);
-                if (err = -1){
+                if (err = -1)
                     mu_die_errno(errno, "child failed to close read end");
-                }
             }
 
             if(cmd_idx == 0){
                 if (pipeline->in_file != NULL){
                     rfd = open(pipeline->in_file, O_RDONLY);
-                    if (rfd == -1){
+                    if (rfd == -1)
                         mu_die_errno(errno, "can't open %s", pipeline->in_file);
-                    }
                 } else{
                     rfd = STDIN_FILENO;
                 }
@@ -264,12 +262,11 @@ pipeline_eval(struct pipeline * pipeline){
             }
 
             /* adjust stdout*/
-            if(cmd_idx == pipeline->num_cmds - 1 ){
+            if(cmd_idx == (pipeline->num_cmds - 1)){
                 if (pipeline->out_file != NULL) {
                     wfd = open(pipeline->out_file, O_WRONLY|O_CREAT|O_TRUNC, 0664);
-                    if (wfd == -1){
+                    if (wfd == -1)
                         mu_die_errno(errno, "can't open %s", pipeline->out_file);
-                    }
                 } else {
                     wfd = STDOUT_FILENO;
                 }
@@ -299,18 +296,16 @@ pipeline_eval(struct pipeline * pipeline){
 
         if(created_pipe){
             err = close(pfd[1]);
-            if (err = -1){
+            if (err = -1)
                 mu_die_errno(errno, "parent failed to close write end");
-            }
             prev_rfd = pfd[0];
         }
-        cmd_idx++;
-
         
-        exit_status = pipeline_wait_all(pipeline);
-        (void)exit_status;
-
+        cmd_idx++;
     }
+
+    exit_status = pipeline_wait_all(pipeline);
+    (void)exit_status;
 
     return;
 }
