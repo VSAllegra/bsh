@@ -138,21 +138,26 @@ pipeline_new(char *line)
             arg = strtok_r(s2, " \t", &saveptr2);
             if (arg == NULL)
                 break;
-            if (strchr(arg, '<') != NULL){
-                pipeline->in_file = arg + 1;
-                args++;
-            }
-            if (strchr(arg, '>') != NULL){
-                pipeline->out_file = arg + 1;
-                file_set = true;
-            }
-            if(!file_set)
-                cmd_push_arg(cmd, arg);
+            cmd_push_arg(cmd, arg);
         }
 
         list_add_tail(&cmd->list, &pipeline->head);
         pipeline->num_cmds += 1;
     }
+
+    list_for_each_entry(cmd, &pipeline->head, list) {
+        for (i = 0; i < cmd->num_args; i++){
+            arg = cmd->args[i];
+            if (strchr(arg, '<') != NULL){
+                pipeline->in_file = arg + 1;
+            }
+            if (strchr(arg, '>') != NULL){
+                pipeline->out_file = arg + 1;
+            }
+        }
+
+    }
+
 
     /* TODO: parse I/O redirects */
 
